@@ -27,4 +27,4 @@ You can now prepare a PR for each project with the required version.
 
 For community, you can take a look at the [JBoss Repository](https://repository.jboss.org/nexus/index.html#nexus-search;gav~org.jbpm~jbpm-workitems~~~).
 
-On Enterprise, check the equivalent version in [Support Article](https://access.redhat.com/articles/3463751).
+On Enterprise, check the equivalent version in this [Support Article](https://access.redhat.com/articles/3463751).
