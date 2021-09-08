@@ -1,0 +1,7 @@
+org/jbpm/bootstrap/service/controllers/RestGenController.class
+org/jbpm/bootstrap/service/BootstrapJbpmApplication.class
+org/jbpm/bootstrap/service/security/BootstrapWebSecurityConfig.class
+org/jbpm/bootstrap/service/rest/ReportResource.class
+org/jbpm/bootstrap/service/handlers/ZipArchiveWorkItemHandler.class
+org/jbpm/bootstrap/service/controllers/IndexController.class
+org/jbpm/bootstrap/service/util/BuildComponent.class

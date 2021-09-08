@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>start.jbpm.org</groupId>
+  <artifactId>jbpm-bootstrap-kjar</artifactId>
+  <versioning>
+    <versions>
+      <version>0.0.1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20210908180520</lastUpdated>
+  </versioning>
+</metadata>
