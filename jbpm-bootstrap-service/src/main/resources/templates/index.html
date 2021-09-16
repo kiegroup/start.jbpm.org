@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129697043-1"></script>
+    <script>
+       window.dataLayer = window.dataLayer || [];
+       function gtag(){dataLayer.push(arguments);}
+       gtag('js', new Date());
+
+       gtag('config', 'UA-129697043-1');
+    </script>
+
+    <link rel="icon" href="img/jbpm_icon.png">
+    <title th:text="#{page.index.title}"></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="Get started with jBPM Business Applications in few seconds. Generate your Business Application directly from the website." name="description">
+	<meta content="jBPM, generate application, get started with jBPM, business automation, business process management, case management, business rules, decision services, BPMN2, DMN, CMMN, BPM, open source business automation, business applications" name="keywords">
+	<meta content="jBPM - Open Source Business Automation Toolkit - Generate business applications" itemprop="name">
+	<meta content="Get started with jBPM Business Applications in few seconds. Generate your Business Application directly from the website." itemprop="description">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="css/jquery-editable-select.min.css">
+    <link rel="stylesheet" href="css/jbpm.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-editable-select.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.min.js"></script>
+</head>
+<body>
+<div id="container">
+    <div id="topcontent" class="row row-top">
+        <center>
+            <div class="card topbackground">
+                <div class="topcontent row d-flex justify-content-center" style="margin-bottom: 1% !important;">
+                    <span th:text="#{page.title.build}"></span>
+                </div>
+                <div class="topcontent row d-flex justify-content-center" style="margin-bottom: 1% !important;">
+                    <span th:text="#{page.title.inseconds}"></span>
+                </div>
+                <p>
+                <div class="topcontent row d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary btn-lg" style="vertical-align: middle; text-align: left; width: 400px;" onclick="generateWithDefaultSettings();">
+                        <i class="fas fa-spinner"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong th:text="#{page.generate.default}"></strong>
+                    </button>
+                </div>
+                </p>
+                <p>
+                <div class="topcontent row d-flex justify-content-center" style="margin-bottom: 5% !important">
+                    <button type="button" class="btn btn-secondary btn-lg" style="vertical-align: middle;text-align: left;width: 400px;" onclick="toogleConfiguration();">
+                        <i class="fas fa-sliders-h"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong th:text="#{page.generate.configure}"></strong>
+                    </button>
+                </div>
+                </p>
+            </div>
+        </center>
+    </div>
+    <div id="description" class="row row-bottom-config">
+        <br/>
+        <br/>
+        <div class="row" style="width: 70%; margin-left: 15%">
+            <div class="card-deck">
+                <div class="card mb-4">
+                    <div class="view overlay">
+                        <img class="card-img-top" src="img/configure.jpg" th:alt="#{page.configure.alt}" style="height: 170px;">
+                        <a href="#!">
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+                    <div class="card-body jbpm-card-body">
+                        <h4 class="card-title" th:text="#{page.configure}"></h4>
+                        <p class="card-text" th:text="#{page.configure.desc}"></p>
+                        <a href="https://docs.jboss.org/jbpm/release/latest/jbpm-docs/html_single/index.html#_configure_business_application" class="btn btn-primary" target="_blank" th:text="#{page.learnhow}"></a>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="view overlay">
+                        <img class="card-img-top" src="img/run.jpg" th:alt="#{page.run.alt}" style="height: 170px;">
+                        <a href=" #!">
+                        <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title" th:text="#{page.run}"></h4>
+                        <p class="card-text" th:text="#{page.run.desc}"></p>
+                        <a href="https://docs.jboss.org/jbpm/release/latest/jbpm-docs/html_single/index.html#_run_your_business_application" class="btn btn-primary" target="_blank" th:text="#{page.learnhow}"></a>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="view overlay">
+                        <img class="card-img-top" src="img/cloud.png" th:alt="#{page.deploy.alt}" style="height: 170px;">
+                        <a href=" #!">
+                        <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title" th:text="#{page.deploy}"></h4>
+                        <p class="card-text" th:text="#{page.deploy.desc}"></p>
+                        <a href="https://docs.jboss.org/jbpm/release/latest/jbpm-docs/html_single/index.html#_deploy_business_application" class="btn btn-primary" target="_blank" th:text="#{page.learnhow}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="bottomcontentconfigapp" class="row row-bottom-config" style="display:none;">
+        <form action="#" id="generateForm" method="post" th:action="@{/}" th:object="${project}">
+            <div id="app">
+                <div class="float-right" style="margin: 3px;">
+                    <i class="fa fa-window-close fa-2x" style="color: black;background-color: white;"
+                       title="Reset business app configuration"
+                       onclick="resetAndGoToFirstStep();"></i>&nbsp;&nbsp;
+                </div>
+
+                <div v-show="currentstep == 1">
+                    <div class="row d-flex justify-content-around" style="height: 300px;">
+                        <div class="middle">
+                            <br/>
+                            <label>
+                                <input type="radio" value="bpm" th:field="*{capabilities}" name="capabilitiesBusinessAutomation" id="capabilitiesBusinessAutomation" onclick="toggle('input:radio#capabilitiesBusinessAutomation', 'bpm');">
+                                <div class="box" data-toggle="tooltip" data-placement="bottom" th:title="#{page.configure.type.businessautomation.tooltip}">
+                                    <i class="fas fa-cogs fa-4x"></i>
+                                    <span th:text="#{page.configure.type.businessautomation}"></span>
+                                </div>
+                            </label>
+                            <label>
+                                <input type="radio" value="brm" th:field="*{capabilities}" name="capabilitiesDecisionManagement" id="capabilitiesDecisionManagement" onclick="toggle('input:radio#capabilitiesDecisionManagement', 'brm');">
+                                <div class="box" data-toggle="tooltip" data-placement="bottom" th:title="#{page.configure.type.decisionmanagement.tooltip}">
+                                    <i class="far fa-lightbulb fa-4x"></i>
+                                    <span th:text="#{page.configure.type.decisionmanagement}"></span>
+                                </div>
+                            </label>
+                            <label>
+                                <input type="radio" value="planner" th:field="*{capabilities}" name="capabilitiesBusinessOptimizer" id="capabilitiesBusinessOptimizer" onclick="toggle('input:radio#capabilitiesBusinessOptimizer', 'planner');">
+                                <div class="box" data-toggle="tooltip" data-placement="bottom" th:title="#{page.configure.type.businessoptimization.tooltip}">
+                                    <i class="fas fa-sliders-h fa-4x"></i>
+                                    <span th:text="#{page.configure.type.businessoptimization}"></span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-show="currentstep == 2">
+                    <div class="w-50 p-3" style="height: 300px;margin-left:auto; margin-right:auto; display:block;">
+                        <div class="form-group">
+                            <label for="appPackage"><strong th:text="#{page.configure.appinfo.packagename}"></strong></label>
+                            <input id="appPackage" type="text" class="form-control" th:field="*{packageName}">
+                        </div>
+                        <div class="form-group">
+                            <label for="appName"><strong th:text="#{page.configure.appinfo.appname}"></strong></label>
+                            <input id="appName" type="text" class="form-control" th:field="*{name}">
+                        </div>
+                        <div class="form-group">
+                            <label class="my-1 mr-2" for="kieVersion"><strong th:text="#{page.configure.appinfo.version}"></strong></label>
+                            <select class="custom-select my-1 mr-sm-2" id="kieVersion" th:field="*{version}">
+                                <option value="" disabled>Enterprise</option>
+				<option value="7.52.0.Final-redhat-00008">Enterprise 7.11.1</option>
+                                <option value="7.52.0.Final-redhat-00007">Enterprise 7.11.0</option>
+                                <option value="7.48.0.Final-redhat-00006">Enterprise 7.10.1</option>
+                                <option value="7.48.0.Final-redhat-00004">Enterprise 7.10.0</option>
+                                <option value="7.44.0.Final-redhat-00003">Enterprise 7.9.0</option>
+                                <option value="7.39.0.Final-redhat-00007">Enterprise 7.8.1</option>
+                                <option value="7.39.0.Final-redhat-00005">Enterprise 7.8.0</option>
+                                <option value="7.33.0.Final-redhat-00002">Enterprise 7.7.0</option>
+                                <option value="7.30.0.Final-redhat-00003">Enterprise 7.6.0</option>
+                                <option value="7.26.0.Final-redhat-00006">Enterprise 7.5.1</option>
+                                <option value="7.26.0.Final-redhat-00005">Enterprise 7.5.0</option>
+                                <option value="7.23.0.Final-redhat-00002">Enterprise 7.4</option>
+                                <option value="7.18.0.Final-redhat-00004">Enterprise 7.3.1</option>
+                                <option value="7.18.0.Final-redhat-00002">Enterprise 7.3</option>
+                                <option value="" disabled>Community</option>
+                                <option value="7.58.0.Final">7.58.0.Final</option>
+                                <option value="7.57.0.Final">7.57.0.Final</option>
+                                <option value="7.56.0.Final">7.56.0.Final</option>
+                                <option value="7.55.0.Final">7.55.0.Final</option>
+                                <option value="7.54.0.Final">7.54.0.Final</option>
+                                <option value="7.53.0.Final">7.53.0.Final</option>
+                                <option value="7.52.0.Final">7.52.0.Final</option>
+                                <option value="7.51.0.Final">7.51.0.Final</option>
+                                <option value="7.50.0.Final">7.50.0.Final</option>
+                                <option value="7.49.0.Final">7.49.0.Final</option>
+                                <option value="7.48.0.Final">7.48.0.Final</option>
+                                <option value="7.47.0.Final">7.47.0.Final</option>
+                                <option value="7.46.0.Final">7.46.0.Final</option>
+                                <option value="7.45.0.Final">7.45.0.Final</option>
+                                <option value="7.44.0.Final">7.44.0.Final</option>
+                                <option value="7.43.0.Final">7.43.0.Final</option>
+                                <option value="7.42.0.Final">7.42.0.Final</option>
+                                <option value="7.41.0.Final">7.41.0.Final</option>
+                                <option value="7.40.0.Final">7.40.0.Final</option>
+                                <option value="7.39.0.Final">7.39.0.Final</option>
+                                <option value="7.38.0.Final">7.38.0.Final</option>
+                                <option value="7.37.0.Final">7.37.0.Final</option>
+                                <option value="7.36.0.Final">7.36.0.Final</option>
+                                <option value="7.35.0.Final">7.35.0.Final</option>
+                                <option value="7.34.0.Final">7.34.0.Final</option>
+                                <option value="7.58.0.Final">7.58.0.Final</option>
+                                <option value="7.59.0.Final">7.59.0.Final</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-show="currentstep == 3">
+                    <div class="row d-flex justify-content-around" style="height: 300px;">
+                    	<div id="warningMsg" class="alert alert-danger" role="alert"></div>
+                        <div class="options middle">
+                            <br/>
+                            <label>
+                                <input type="checkbox" th:value="kjar" th:field="*{options}" name="optionsKjar" id="optionsKjar" onclick="unchecktoggle('input:checkbox#optionsKjar', 'kjar', 'input:checkbox#optionsDKjar');">
+                                <div class="box" data-toggle="tooltip" data-placement="bottom" th:title="#{page.configure.components.businessassets.tooltip}">
+                                    <i class="fas fa-lightbulb fa-4x"></i>
+                                    <span th:text="#{page.configure.components.businessassets}"></span>
+                                </div>
+                            </label>
+                            <label>
+                                <input type="checkbox" th:value="dkjar" th:field="*{options}" name="optionsDKjar" id="optionsDKjar" onclick="unchecktoggle('input:checkbox#optionsDKjar', 'dkjar', 'input:checkbox#optionsKjar');">
+                                <div class="box" data-toggle="tooltip" data-placement="bottom" th:title="#{page.configure.components.dynamicassets.tooltip}">
+                                    <i class="fas fa-wrench  fa-4x"></i>
+                                    <span th:text="#{page.configure.components.dynamicassets}"></span>
+                                </div>
+                            </label>
+                            <label>
+                                <input type="checkbox" th:value="model" th:field="*{options}" name="optionsModel" id="optionsModel" onclick="toggle('input:checkbox#optionsModel', 'model');">
+                                <div class="box" data-toggle="tooltip" data-placement="bottom" th:title="#{page.configure.components.datamodel.tooltip}">
+                                    <i class="fa fa-sliders-h fa-4x"></i>
+                                    <span th:text="#{page.configure.components.datamodel}"></span>
+                                </div>
+                            </label>
+                            <label>
+                                <input type="checkbox" th:value="service" th:field="*{options}" name="optionsService" id="optionsService" onclick="toggle('input:checkbox#optionsService', 'service');">
+                                <div class="box" data-toggle="tooltip" data-placement="bottom" th:title="#{page.configure.components.service.tooltip}">
+                                    <i class="fas fa-cogs fa-4x"></i>
+                                    <span th:text="#{page.configure.components.service}"></span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-show="currentstep == 4">
+
+                    <div class="row d-flex justify-content-around" style="height: 350px;">
+                        <div class="middle">
+                            <br/>
+                            <div class="text-center" style="margin-top: 5px;">
+                                <i class="far fa-check-circle fa-3x img-valign" style="color: green; margin-top: 5px;"></i>&nbsp;&nbsp;
+                            </div>
+                            <div class="text-center" style="margin-top: 5px;">
+                                <span class="successtext" style="color: green;" th:text="#{page.configure.success.title}"></span>
+                            </div>
+                            <div style="text-align: left; margin-left: 35%;">
+                                <i class="fas fa-check"></i>&nbsp;<span class="nextsteps" th:text="#{page.configure.success.step1}"></span><br/>
+                                <i class="fas fa-check"></i>&nbsp;<span class="nextsteps" th:text="#{page.configure.success.step2}"></span><br/>
+                                <i class="fas fa-check"></i>&nbsp;<span class="nextsteps" th:text="#{page.configure.success.step3}"></span><br/>
+                                <i class="fas fa-check"></i>&nbsp;<span class="nextsteps" th:text="#{page.configure.success.step4}"></span><br/>
+                            </div>
+                            <div class="text-center" style="margin-top: 5px;">
+                                <hr style="width: 70%; color: #4682B4;"/>
+                            </div>
+                            <div class="text-center" style="margin-top: 5px;">
+                                <a href="https://docs.jboss.org/jbpm/release/latest/jbpm-docs/html_single/index.html#_businessappoverview" target="_blank">
+                                    <button type="button" class="btn btn-primary btn-lg">
+                                        <i class="fa fa-info-circle"></i>&nbsp;
+                                        <span th:text="#{page.configure.success.readmore}"></span>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <step v-for="step in steps" :currentstep="currentstep" :key="step.id" :step="step" :stepcount="steps.length" @step-change="stepChanged">
+                </step>
+
+                <script type="x-template" id="step-navigation-template">
+                    <ol class="step-indicator">
+                        <li v-for="step in steps" is="step-navigation-step" :key="step.id" :step="step" :currentstep="currentstep">
+                        </li>
+                    </ol>
+                </script>
+
+                <script type="x-template" id="step-navigation-step-template" th:inline="text">
+                    <li :class="indicatorclass">
+                        <div class="step"><i :class="step.icon_class"></i></div>
+                        <div class="caption hidden-xs hidden-sm">
+                            <span>[[#{page.configure.step}]]</span>
+                            <span v-text="step.id"></span>:
+                            <span v-text="step.title"></span>
+                        </div>
+                    </li>
+                </script>
+
+                <script type="x-template" id="step-template" th:inline="text">
+                    <div class="step-wrapper" :class="stepWrapperClass">
+                        <center>
+                            <button type="button" class="btn btn-primary" @click="nextStep" :hidden="thirdorendstep">
+                                <i class="fa fa-arrow-right"></i>&nbsp;
+                                <span>[[#{page.configure.next}]]</span>
+                            </button>
+                            <button id="submitButton" type="submit" class="btn btn-primary" v-if="thirdstep">
+                                <i class="fas fa-spinner"></i>&nbsp;
+                                <span>[[#{page.configure.generate}]]</span>
+                            </button>
+                        </center>
+                    </div>
+                </script>
+
+                <step-navigation :steps="steps" :currentstep="currentstep">
+                </step-navigation>
+            </div>
+
+        </form>
+    </div>
+    <p/><p/><p/><p>
+    <footer class="page-footer font-small jbpmfooter text-center">
+        <a href="http://jbpm.org/" target="_blank"><img src="img/provided_by_jbpm.png" th:alt="#{page.footer.provided}" width="180px" height="68px"></a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="https://www.openshift.com/" target="_blank"><img src="img/powered_by_openshift.png" th:alt="#{page.footer.powered}" width="180px" height="48px"></a>
+    </footer>
+    </p>
+</div>
+
+<script>
+    $(document).ready(function () {
+        setFormDefaults();
+		$('#warningMsg').addClass('hidden');
+        $('#kieVersion').editableSelect();
+        setDefaultVersion();
+
+        $('form#generateForm').submit(function (e) {
+            $('#warningMsg').html('');
+            $('#warningMsg').addClass('hidden');
+            e.preventDefault();
+            if (!document.getElementById('optionsKjar').checked && !document.getElementById('optionsDKjar').checked && !document.getElementById('optionsModel').checked && !document.getElementById('optionsService').checked) {
+        		$('#warningMsg').html('At least one project type must be selected');
+        		$('#warningMsg').removeClass('hidden');
+        	} else {
+
+            	showPleaseWait();
+
+            	$('#zipName').text($('input:text#appName').val() + '.zip');
+            	$('#serviceDirName').text($('input:text#appName').val() + '-service');
+            	this.submit();
+
+            	setTimeout(function () {
+                	hidePleaseWait();
+                	goToEndStep();
+            	}, 5000)
+            	setFormDefaults();
+            }
+        });
+
+        // init all tooltips
+        $('[data-toggle="tooltip"]').tooltip()
+
+    });
+
+    function goToEndStep() {
+        v1.$children[0].endStep();
+        var bottomcontentconfigapp = document.getElementById('bottomcontentconfigapp');
+        bottomcontentconfigapp.style.display = 'block';
+    }
+
+    function setFormDefaults() {
+        $('input:checkbox#optionsKjar').prop("checked", true);
+        $('input:checkbox#optionsDKjar').prop("checked", false);
+        $('input:checkbox#optionsModel').prop("checked", true);
+        $('input:checkbox#optionsService').prop("checked", true);
+        $('input:checkbox#optionsKjar').val("kjar");
+        $('input:checkbox#optionsDKjar').val("");
+        $('input:checkbox#optionsModel').val("model");
+        $('input:checkbox#optionsService').val("service");
+        $('input:radio#capabilitiesBusinessAutomation').prop('checked', 'checked');
+        $('input:text#appPackage').val('com.company');
+        $('input:text#appName').val('business-application');
+        setDefaultVersion();
+    }
+
+    function setDefaultVersion() {
+        $('#kieVersion').val('7.59.0.Final');
+    }
+
+    function generateWithDefaultSettings() {
+        setFormDefaults();
+        $('#zipName').text($('input:text#appName').val() + '.zip');
+        $('#serviceDirName').text($('input:text#appName').val() + '-service');
+
+        $('form#generateForm').submit();
+
+        var description = document.getElementById('description');
+        description.style.display = 'none';
+
+    }
+
+    function toogleConfiguration() {
+        var bottomcontentconfigapp = document.getElementById('bottomcontentconfigapp');
+        var description = document.getElementById('description');
+
+        if (bottomcontentconfigapp.style.display == 'none') {
+            bottomcontentconfigapp.style.display = 'block';
+            description.style.display = 'none';
+        }
+    }
+
+    function showPleaseWait() {
+        $.ajax({
+            url: "/generatingmodal/",
+            success: function (data) {
+                $(document.body).append(data);
+                $("#pleaseWaitDialog").modal("show");
+            }
+        });
+    }
+
+    function hidePleaseWait() {
+        $("#pleaseWaitDialog").modal("hide");
+    }
+
+    function toggle(item, val) {
+        if ($(item).prop("checked")) {
+            $(item).val(val);
+        } else {
+            $(item).val('');
+        }
+    }
+
+    function unchecktoggle(item1, val1, item2) {
+        toggle(item1, val1);
+        $(item2).prop("checked", false);
+        toggle(item2, '');
+    }
+
+    function resetAndGoToFirstStep() {
+        setFormDefaults();
+        v1.$children[0].firstStep();
+        document.getElementById('bottomcontentconfigapp').style.display = 'none';
+        document.getElementById('description').style.display = 'block';
+    }
+
+</script>
+<script th:inline="javascript">
+    Vue.component("step-navigation-step", {
+        template: "#step-navigation-step-template",
+
+        props: ["step", "currentstep"],
+
+        computed: {
+            indicatorclass() {
+                return {
+                    active: this.step.id == this.currentstep,
+                    complete: this.currentstep == 4 || (this.currentstep > this.step.id)
+                };
+            }
+        }
+    });
+
+    Vue.component("step-navigation", {
+        template: "#step-navigation-template",
+
+        props: ["steps", "currentstep"]
+    });
+
+    Vue.component("step", {
+        template: "#step-template",
+
+        props: ["step", "stepcount", "currentstep"],
+
+        computed: {
+            active() {
+                return this.step.id == this.currentstep;
+            },
+
+            firststep() {
+                return this.currentstep == 1;
+            },
+
+            thirdstep() {
+                return this.currentstep == 3;
+            },
+
+            laststep() {
+                return this.currentstep == this.stepcount;
+            },
+
+            thirdorendstep() {
+                return this.currentstep == 3 || this.currentstep == 4;
+            },
+
+            firstorendstep() {
+                return this.currentstep == 1 || this.currentstep == 4;
+            },
+
+            endstep() {
+                return this.currentstep == 4;
+            },
+
+            stepWrapperClass() {
+                return {
+                    active: this.active
+                };
+            }
+        },
+
+        methods: {
+            firstStep() {
+                this.$emit("step-change", 1);
+                setFormDefaults();
+            },
+
+            nextStep() {
+                this.$emit("step-change", this.currentstep + 1);
+            },
+
+            lastStep() {
+                this.$emit("step-change", this.currentstep - 1);
+            },
+
+            endStep() {
+                this.$emit("step-change", 4);
+            }
+        }
+    });
+
+    var v1 = new Vue({
+        el: "#app",
+
+        data: {
+            currentstep: 1,
+
+            steps: [
+                {
+                    id: 1,
+                    title: /*[[#{page.configure.step1}]]*/ "Application Type",
+                    icon_class: "fas fa-share-alt"
+                },
+                {
+                    id: 2,
+                    title:  /*[[#{page.configure.step2}]]*/ "Application Info",
+                    icon_class: "fa fa fa-cog"
+                },
+                {
+                    id: 3,
+                    title: /*[[#{page.configure.step3}]]*/ "Application Components",
+                    icon_class: "fa fa-sliders-h"
+                },
+                {
+                    id: 4,
+                    title: /*[[#{page.configure.step4}]]*/ "Launch your Application",
+                    icon_class: "fas fa-play-circle"
+                }
+            ]
+        },
+
+        methods: {
+            stepChanged(step) {
+                this.currentstep = step;
+            }
+        }
+    });
+</script>
+</body>
+</html>
