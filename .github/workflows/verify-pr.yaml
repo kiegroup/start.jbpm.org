@@ -50,6 +50,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: ${{ matrix.java-version }}
+          distribution: 'adopt'
       # See https://docs.github.com/en/actions/guides/building-and-testing-java-with-maven#caching-dependencies
       - name: Cache Maven packages
         uses: actions/cache@v2
@@ -61,4 +62,3 @@ jobs:
         shell: bash
         run: |
           timeout 5m ./launch.sh clean install -Popenshift
-
