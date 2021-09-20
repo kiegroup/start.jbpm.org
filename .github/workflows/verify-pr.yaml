@@ -13,9 +13,11 @@ on:
       - '.github/*'
       - 'Jenkinsfile*'
       - '.jenkins/**'
+  
+  workflow_dispatch:
 
 jobs:
-  run-launch:
+  build:
     timeout-minutes: 120
     strategy:
       matrix:
