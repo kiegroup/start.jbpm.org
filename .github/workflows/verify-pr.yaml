@@ -25,6 +25,8 @@ jobs:
         java-version: [11]
       fail-fast: false
     runs-on: ${{ matrix.os }}
+    env:
+        CI: true
     name: Run launch.sh
     steps:
       - name: Disk space report before modification
@@ -61,4 +63,4 @@ jobs:
       - name: Verify Launch Script
         shell: bash
         run: |
-          timeout 5m ./launch.sh clean install -Popenshift
+          ./launch.sh clean install -Popenshift
