@@ -44,8 +44,10 @@ jobs:
         run: |
           echo "Available storage:"
           df -h
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Set up JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: ${{ matrix.java-version }}
       # See https://docs.github.com/en/actions/guides/building-and-testing-java-with-maven#caching-dependencies
@@ -58,7 +60,5 @@ jobs:
       - name: Verify Launch Script
         shell: bash
         run: |
-          ls -la 
-          ls -la app
-          timeout 5m ./app/launch.sh clean install -Popenshift
+          timeout 5m ./launch.sh clean install -Popenshift
 
