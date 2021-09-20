@@ -24,7 +24,7 @@ if [ "$MVN_ARG_LINE" != "" ] ; then
 
     "$mvnBin" -v
     echo
-    projects=( "*-model" "*-kjar" "*-service")
+    projects=( "*.org")
 
     for suffix in "${projects[@]}"; do
 
@@ -59,12 +59,13 @@ else
 fi
 
 if [[ "$@" =~ "docker" ]]; then
-    echo "Launching the application as docker container..."
-    
+    echo "Launching the application as docker container..."  
     docker run -d -p 8090:8090 --name jbpm-bootstrap jbpm/jbpm-bootstrap-service:1.0.0
 else
 
 	echo "Launching the application locally..."
+	folder="*.org"
+	cd $folder
 	pattern="*-service"
 	files=( $pattern )
 	cd ${files[0]}
