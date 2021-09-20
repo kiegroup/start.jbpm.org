@@ -57,5 +57,5 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Verify Launch Script
         shell: bash
-        run: timeout 5m launch.sh clean install -Popenshift
+        run: timeout 5m ./app/launch.sh clean install -Popenshift
 
