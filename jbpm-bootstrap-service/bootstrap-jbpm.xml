@@ -28,9 +28,9 @@
     <container>
       <containerId>jbpm-bootstrap-kjar</containerId>
       <releaseId>
-        <groupId>org.jbpm.start</groupId>
+        <groupId>start.jbpm.org</groupId>
         <artifactId>jbpm-bootstrap-kjar</artifactId>
-        <version>1.0.0</version>
+        <version>0.0.1-SNAPSHOT</version>
       </releaseId>
       <status>STARTED</status>
       <scanner>
