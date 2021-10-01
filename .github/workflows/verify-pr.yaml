@@ -1,5 +1,4 @@
 ﻿name: Verify PR
-
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
@@ -64,3 +63,4 @@ jobs:
         shell: bash
         run: |
           ./launch.sh clean install
+
