@@ -138,7 +138,7 @@
                 <image>
                   <name>jbpm/${project.artifactId}:${project.version}</name>
                   <build>
-                    <from> registry.access.redhat.com/ubi8/openjdk-8:latest</from>
+                    <from>registry.access.redhat.com/ubi8/openjdk-8:latest</from>
                     <assembly>
                       <targetDir>/</targetDir>
                       <inline>
