@@ -5,7 +5,7 @@ Official repository of the [start.jbpm.org](https://start.jbpm.org) website.
 To try the website locally, just run:
 
 ```shell
-./launch.sh clean install -Popenshift
+./launch.sh clean install
 ```
 
 This command will build the application and the website image.
@@ -18,7 +18,7 @@ This repository also contains script and resources to automate [start.jbpm.org](
 
 ### Bump Versions
 
-In order to bump versions from jBPM and/or Enterprise releases, clone the repositories `jbpm-bootstrap-model`, `jbpm-bootstrap-kjar` and `jbpm-bootstrap-service`:
+In order to bump versions from jBPM and/or Enterprise releases, clone the repository `start.jbpm.org`:
 
 ```shell
 $ ls

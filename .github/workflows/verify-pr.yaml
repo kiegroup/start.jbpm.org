@@ -1,5 +1,4 @@
-name: Verify PR
-
+﻿name: Verify PR
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
@@ -63,4 +62,5 @@ jobs:
       - name: Verify Launch Script
         shell: bash
         run: |
-          ./launch.sh clean install -Popenshift
+          ./launch.sh clean install
+
