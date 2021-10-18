@@ -60,7 +60,7 @@ fi
 
 if [[ "$@" =~ "docker" ]]; then
     echo "----> Launching the application as docker container..."  
-    docker run -d -p 8090:8090 --name jbpm-bootstrap jbpm/jbpm-bootstrap-service:1.0.0
+    docker run --rm -it -p 8090:8090 --name jbpm-bootstrap jbpm/jbpm-bootstrap-service:latest
 else
 
 	echo "----> Launching the application locally..."

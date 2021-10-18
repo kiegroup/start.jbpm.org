@@ -1,12 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>start.jbpm.org</groupId>
-    <artifactId>start.jbpm.org</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>jbpm-bootstrap-kjar</artifactId>  
+  <groupId>start.jbpm.org</groupId>
+  <artifactId>jbpm-bootstrap-kjar</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
   <packaging>kjar</packaging>
   <name>jBPM :: Bootstrap :: kjar</name>
   <description>Processes responsible for generating business applications</description>
