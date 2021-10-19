@@ -1,10 +1,24 @@
-# start.jbpm.org CI/CD tooling
+# start.jbpm.org Website
 
-This repository contains script and resources to automate [start.jbpm.org](https://start.jbpm.org) releases.
+Official repository of the [start.jbpm.org](https://start.jbpm.org) website.
 
-## Bump Versions
+To try the website locally, just run:
 
-In order to bump versions from jBPM and/or Enterprise releases, clone the repositories `jbpm-bootstrap-model`, `jbpm-bootstrap-kjar` and `jbpm-bootstrap-service`:
+```shell
+./launch.sh clean install
+```
+
+This command will build the application and the website image.
+
+After some time, access the application via [http://localhost:8090/](http://localhost:8090/).
+
+## CI/CD tooling
+
+This repository also contains script and resources to automate [start.jbpm.org](https://start.jbpm.org) releases.
+
+### Bump Versions
+
+In order to bump versions from jBPM and/or Enterprise releases, clone the repository `start.jbpm.org`:
 
 ```shell
 $ ls
@@ -23,7 +37,7 @@ The only required flag is **community**, since a product release is always follo
 
 You can now prepare a PR for each project with the required version.
 
-### Finding the correct version
+#### Finding the correct version
 
 For community, you can take a look at the [JBoss Repository](https://repository.jboss.org/nexus/index.html#nexus-search;gav~org.jbpm~jbpm-workitems~~~).
 
