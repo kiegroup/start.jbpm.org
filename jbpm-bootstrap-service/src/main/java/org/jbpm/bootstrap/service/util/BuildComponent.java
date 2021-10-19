@@ -37,9 +37,7 @@ public class BuildComponent {
     private static final String KIE_VERSION = System.getProperty("org.kie.version",
                                                                  DEFAULT_VERSION);
     private static final String MVN_SETTINGS = System.getProperty("kie.maven.settings.custom");
-
-    private static final String DEFAULT_SPRING_BOOT_VERSION = "2.3.4.RELEASE";
-    private static final String OLD_SPRING_BOOT_VERSION = "1.5.12.RELEASE";
+   
 
     @Autowired
     private ProcessService processService;
@@ -106,8 +104,7 @@ public class BuildComponent {
 
             String[] versionItems = project.getVersion().split("\\.");
             Integer minorVersion = Integer.parseInt(versionItems[1]);
-            // in 7.18 spring boot was upgraded to 2.1.x and thus needs to change version based on selected version
-            params.put("springbootVersion", minorVersion >= 18 ? DEFAULT_SPRING_BOOT_VERSION : OLD_SPRING_BOOT_VERSION);
+            // in 7.18 spring boot was upgraded to 2.1.x and thus needs to change version based on selected version       
 
             long processInstanceId = processService.startProcess(CONTAINER_ID,
                                                                  PROCESS_ID,
