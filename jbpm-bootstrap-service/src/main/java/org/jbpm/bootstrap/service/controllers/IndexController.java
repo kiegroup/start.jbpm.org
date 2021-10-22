@@ -17,14 +17,17 @@ package org.jbpm.bootstrap.service.controllers;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Map;
 
 import org.jbpm.bootstrap.model.Project;
+import org.jbpm.bootstrap.service.config.VersionMap;
 import org.jbpm.bootstrap.service.util.BuildComponent;
 import org.jbpm.services.api.ProcessService;
 import org.jbpm.services.api.admin.ProcessInstanceAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -39,6 +42,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class IndexController {
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
+    
+    @Autowired
+  	private VersionMap versionMap;
 
     @Autowired
     private ProcessService processService;
@@ -48,9 +54,13 @@ public class IndexController {
 
     @Autowired
     BuildComponent buildComponent;
+    
+    @Value("${kieserver.version}")
+    private String DEFAULT_VERSION;
 
     @GetMapping("/")
     public String showIndex(Model model) {
+    	 model.addAttribute("version", DEFAULT_VERSION);
         return "index";
     }
 
@@ -60,10 +70,23 @@ public class IndexController {
     }
 
     @ModelAttribute("project")
-    public Project getProject() {
-        return new Project();
+    public Project getProject() {    	
+    	return new Project( versionMap.getMappedVersions()) ;
+  
     }
-
+    
+    @ModelAttribute("enterpriseVersions")
+    public Map<String, String> getEnterpriseVersions() {
+		return versionMap.getEnterpriseVersions();
+	}
+    
+    @ModelAttribute("communityVersions")
+    public Map<String, String> getCommunityVersions() {
+    	return versionMap.getCommunityVersions();
+  
+    }
+    
+  
     @PostMapping(value = "/", produces = {"application/octet-stream"})
     public @ResponseBody
     ResponseEntity<?> buildApp(@ModelAttribute Project project) throws Exception {

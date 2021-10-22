@@ -17,3 +17,5 @@ target/
 .factorypath
 .vscode
 .run/
+.idea
+**/keystore.p12

@@ -124,6 +124,7 @@
       <properties>
         <jkube.mode>Kubernetes</jkube.mode>
         <local.maven.path>../jbpm-bootstrap-kjar/target/local-repository/maven</local.maven.path>
+        <spring.profiles.active>openshift</spring.profiles.active>
       </properties>
 
       <build>
@@ -136,7 +137,7 @@
               <verbose>false</verbose>
               <images>
                 <image>
-                  <name>jbpm/${project.artifactId}:${project.version}</name>
+                  <name>jbpm/${project.artifactId}:latest</name>
                   <build>
                     <from>registry.access.redhat.com/ubi8/openjdk-8:latest</from>
                     <assembly>
@@ -157,21 +158,98 @@
                         <fileSets>
                         <fileSet>
                           <directory>src/main/docker</directory>
-                          <outputDirectory>opt/jboss/.m2</outputDirectory>
+                          <outputDirectory>home/jboss/.m2</outputDirectory>
                           <includes>
                             <include>settings.xml</include>
                           </includes>
                         </fileSet>
                         <fileSet>
                           <directory>${local.maven.path}</directory>
-                          <outputDirectory>opt/jboss/.m2/repository</outputDirectory>
+                          <outputDirectory>home/jboss/.m2/repository</outputDirectory>
                         </fileSet>
                         </fileSets>
                       </inline>
                       <user>jboss:jboss:jboss</user>
                     </assembly>
                     <env>
-                      <JAVA_OPTIONS>-Dorg.kie.version=7.RELEASE -Dspring.profiles.active=docker</JAVA_OPTIONS>
+                      <JAVA_OPTIONS>-Dorg.kie.version=7.RELEASE -Dspring.profiles.active=${spring.profiles.active}</JAVA_OPTIONS>
+                    </env>
+                  </build>
+                </image>
+              </images>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>install</phase>
+                <goals>
+                  <goal>resource</goal>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile> 
+    <profile>
+      <id>openshift</id>
+      <activation>
+        <property>
+          <name>openshift</name>
+        </property>
+      </activation>
+
+      <properties>
+        <jkube.mode>Kubernetes</jkube.mode>
+        <local.maven.path>../jbpm-bootstrap-kjar/target/local-repository/maven</local.maven.path>
+      </properties>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.jkube</groupId>
+            <artifactId>kubernetes-maven-plugin</artifactId>
+            <version>${jkube.version}</version>
+            <configuration>
+              <verbose>false</verbose>
+              <images>
+                <image>
+                  <name>jbpm/${project.artifactId}:latest</name>
+                  <build>
+                    <from>registry.access.redhat.com/ubi8/openjdk-8:latest</from>
+                    <assembly>
+                      <targetDir>/</targetDir>
+                      <inline>
+                        <files>
+                          <file>
+                            <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+                            <outputDirectory>deployments</outputDirectory>
+                            <destName>${project.build.finalName}.${project.packaging}</destName>
+                          </file>
+                          <file>
+                            <source>bootstrap-jbpm.xml</source>
+                            <outputDirectory>deployments</outputDirectory>
+                            <destName>bootstrap-jbpm.xml</destName>
+                          </file>
+                        </files>
+                        <fileSets>
+                        <fileSet>
+                          <directory>src/main/docker</directory>
+                          <outputDirectory>home/jboss/.m2</outputDirectory>
+                          <includes>
+                            <include>settings.xml</include>
+                          </includes>
+                        </fileSet>
+                        <fileSet>
+                          <directory>${local.maven.path}</directory>
+                          <outputDirectory>home/jboss/.m2/repository</outputDirectory>
+                        </fileSet>
+                        </fileSets>
+                      </inline>
+                      <user>jboss:jboss:jboss</user>
+                    </assembly>
+                    <env>
+                      <JAVA_OPTIONS>-Dorg.kie.version=7.RELEASE -Dspring.profiles.active=${spring.profiles.active}</JAVA_OPTIONS>
                     </env>
                   </build>
                 </image>

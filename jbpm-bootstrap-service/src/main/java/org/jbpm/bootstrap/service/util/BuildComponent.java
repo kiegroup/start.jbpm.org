@@ -19,6 +19,7 @@ import org.kie.internal.runtime.error.ExecutionError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -33,11 +34,14 @@ public class BuildComponent {
     private static final String CONTAINER_ID = "jbpm-bootstrap-kjar";
     private static final String PROCESS_ID = "GenerateProject";
 
-    private static final String DEFAULT_VERSION = "7.59.0.Final";
-    private static final String KIE_VERSION = System.getProperty("org.kie.version",
+    @Value("${kieserver.version}")
+    private String DEFAULT_VERSION;
+    private String KIE_VERSION = System.getProperty("org.kie.version",
                                                                  DEFAULT_VERSION);
     private static final String MVN_SETTINGS = System.getProperty("kie.maven.settings.custom");
-   
+
+    private static final String DEFAULT_SPRING_BOOT_VERSION = "2.3.4.RELEASE";
+    private static final String OLD_SPRING_BOOT_VERSION = "1.5.12.RELEASE";
 
     @Autowired
     private ProcessService processService;
@@ -104,7 +108,8 @@ public class BuildComponent {
 
             String[] versionItems = project.getVersion().split("\\.");
             Integer minorVersion = Integer.parseInt(versionItems[1]);
-            // in 7.18 spring boot was upgraded to 2.1.x and thus needs to change version based on selected version       
+            // in 7.18 spring boot was upgraded to 2.1.x and thus needs to change version based on selected version
+            params.put("springbootVersion", minorVersion >= 18 ? DEFAULT_SPRING_BOOT_VERSION : OLD_SPRING_BOOT_VERSION);
 
             long processInstanceId = processService.startProcess(CONTAINER_ID,
                                                                  PROCESS_ID,
