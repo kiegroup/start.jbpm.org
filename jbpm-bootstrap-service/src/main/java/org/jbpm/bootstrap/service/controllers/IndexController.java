@@ -17,6 +17,7 @@ package org.jbpm.bootstrap.service.controllers;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
 import java.util.Map;
 
 import org.jbpm.bootstrap.model.Project;
@@ -56,11 +57,11 @@ public class IndexController {
     BuildComponent buildComponent;
     
     @Value("${kieserver.version}")
-    private String DEFAULT_VERSION;
+    private String defaultVersion;
 
     @GetMapping("/")
     public String showIndex(Model model) {
-    	 model.addAttribute("version", DEFAULT_VERSION);
+    	 model.addAttribute("version", defaultVersion);
         return "index";
     }
 
@@ -81,7 +82,7 @@ public class IndexController {
 	}
     
     @ModelAttribute("communityVersions")
-    public Map<String, String> getCommunityVersions() {
+    public List<String> getCommunityVersions() {
     	return versionMap.getCommunityVersions();
   
     }

@@ -166,9 +166,9 @@
          							th:value="${version.key}" 
          							th:text="${version.value}"></option>
          						 <option value="" disabled>Community</option>
-      							 <option th:each="version : ${communityVersions.entrySet()}" 
-         							th:value="${version.key}" 
-         							th:text="${version.value}"></option>                       		  	        						                         
+      							 <option th:each="version : ${communityVersions}" 
+      							 	th:value="${version}"         							
+         							th:text="${version}"></option>                       		  	        						                         
                             </select>
                         </div>
                     </div>

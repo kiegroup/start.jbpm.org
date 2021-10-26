@@ -35,9 +35,8 @@ public class BuildComponent {
     private static final String PROCESS_ID = "GenerateProject";
 
     @Value("${kieserver.version}")
-    private String DEFAULT_VERSION;
-    private String KIE_VERSION = System.getProperty("org.kie.version",
-                                                                 DEFAULT_VERSION);
+    private String defaultVersion;
+    private String kieVersion = System.getProperty("org.kie.version",defaultVersion);
     private static final String MVN_SETTINGS = System.getProperty("kie.maven.settings.custom");
 
     private static final String DEFAULT_SPRING_BOOT_VERSION = "2.3.4.RELEASE";
@@ -97,7 +96,7 @@ public class BuildComponent {
             params.put("kjarSettings",
                        kjarSettings);
             params.put("kieVersion",
-                       KIE_VERSION);
+            		kieVersion);
             params.put("projectVersion",
                        project.getVersion());
             params.put("projectOptions",
@@ -156,7 +155,7 @@ public class BuildComponent {
     }
 
     public String getDefaultVersion() {
-        return DEFAULT_VERSION;
+        return defaultVersion;
     }
 
     public Project setDefaultsIfNotExist(Project project) {
@@ -179,7 +178,7 @@ public class BuildComponent {
         }
 
         if (project.getVersion() == null || project.getVersion().length() < 1) {
-            project.setVersion(DEFAULT_VERSION);
+            project.setVersion(defaultVersion);
         }
 
         return project;
