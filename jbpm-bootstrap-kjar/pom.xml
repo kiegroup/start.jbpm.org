@@ -23,7 +23,7 @@
 	<version.plexus.component>1.6</version.plexus.component>
 	<version.xml.apis>1.0.b2</version.xml.apis>
 	<version.maven.artifact>3.0</version.maven.artifact>
-	<version.commons.io>2.7</version.commons.io>
+	<version.commons.io>2.2</version.commons.io>
 	<version.commons.lang>2.4</version.commons.lang>
 	<version.velocity>1.7</version.velocity>
 	<version.asm>3.2</version.asm>
@@ -36,7 +36,7 @@
 	<version.maven.invoker>2.2</version.maven.invoker>
 	<version.maven.artifact.filters>3.0.0</version.maven.artifact.filters>
 	<version.maven.resources.plugin>3.1.0</version.maven.resources.plugin>
-	<version.ant>1.10.11</version.ant>
+	<version.ant>1.8.1</version.ant>
   </properties>
 
   <dependencies>
