@@ -24,5 +24,42 @@
       </config-item>
     </configItems>
   </configuration>
-  <containers/>
+  <containers>
+    <container>
+      <containerId>jbpm-bootstrap-kjar</containerId>
+      <releaseId>
+        <groupId>start.jbpm.org</groupId>
+        <artifactId>jbpm-bootstrap-kjar</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </releaseId>
+      <status>STARTED</status>
+      <scanner>
+        <status>STOPPED</status>
+      </scanner>
+      <configItems>
+        <config-item>
+          <name>KBase</name>
+          <value></value>
+          <type>BPM</type>
+        </config-item>
+        <config-item>
+          <name>KSession</name>
+          <value></value>
+          <type>BPM</type>
+        </config-item>
+        <config-item>
+          <name>MergeMode</name>
+          <value>MERGE_COLLECTIONS</value>
+          <type>BPM</type>
+        </config-item>
+        <config-item>
+          <name>RuntimeStrategy</name>
+          <value>PER_REQUEST</value>
+          <type>BPM</type>
+        </config-item>
+      </configItems>
+      <messages/>
+      <containerAlias>jbpm-bootstrap-kjar</containerAlias>
+    </container>
+  </containers>
 </kie-server-state>

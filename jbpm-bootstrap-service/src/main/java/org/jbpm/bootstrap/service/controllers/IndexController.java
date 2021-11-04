@@ -17,14 +17,18 @@ package org.jbpm.bootstrap.service.controllers;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
 
 import org.jbpm.bootstrap.model.Project;
+import org.jbpm.bootstrap.service.config.VersionMap;
 import org.jbpm.bootstrap.service.util.BuildComponent;
 import org.jbpm.services.api.ProcessService;
 import org.jbpm.services.api.admin.ProcessInstanceAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -38,61 +42,75 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class IndexController {
 
-    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
+	private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
-    @Autowired
-    private ProcessService processService;
+	@Autowired
+	private VersionMap versionMap;
 
-    @Autowired
-    ProcessInstanceAdminService processInstanceAdminService;
+	@Autowired
+	private ProcessService processService;
 
-    @Autowired
-    BuildComponent buildComponent;
+	@Autowired
+	ProcessInstanceAdminService processInstanceAdminService;
 
-    @GetMapping("/")
-    public String showIndex(Model model) {
-        return "index";
-    }
+	@Autowired
+	BuildComponent buildComponent;
 
-    @GetMapping("/reports")
-    public String showReports(Model model) {
-        return "reports";
-    }
+	@Value("${kieserver.version}")
+	private String defaultVersion;
 
-    @ModelAttribute("project")
-    public Project getProject() {
-        return new Project();
-    }
+	@GetMapping("/")
+	public String showIndex(Model model) {
+		model.addAttribute("version", defaultVersion);
+		return "index";
+	}
 
-    @PostMapping(value = "/", produces = {"application/octet-stream"})
-    public @ResponseBody
-    ResponseEntity<?> buildApp(@ModelAttribute Project project) throws Exception {
-        logger.info("Received request for generating application for project {}",
-                    project);
+	@GetMapping("/reports")
+	public String showReports(Model model) {
+		return "reports";
+	}
 
-        if (project == null) {
-            logger.error("Project is missing");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+	@ModelAttribute("project")
+	public Project getProject() {
+		return new Project(versionMap.getMappedVersions());
 
-        return buildComponent.buildApp(project, true);
-    }
+	}
 
-    @GetMapping("/generatingmodal")
-    public String getGeneratingModal() {
-        return "fragments :: generatingmodal";
-    }
+	@ModelAttribute("enterpriseVersions")
+	public Map<String, String> getEnterpriseVersions() {
+		return versionMap.getEnterpriseVersions();
+	}
 
-    @ExceptionHandler(Exception.class)
-    public String exception(final Exception e,
-                            final Model model) {
-        StringWriter errors = new StringWriter();
-        e.printStackTrace(new PrintWriter(errors));
-        model.addAttribute("stacktrace",
-                           errors.toString());
-        String errorMessage = (e != null ? e.getMessage() : "Unknown error");
-        model.addAttribute("errorMessage",
-                           errorMessage);
-        return "error";
-    }
+	@ModelAttribute("communityVersions")
+	public List<String> getCommunityVersions() {
+		return versionMap.getCommunityVersions();
+
+	}
+
+	@PostMapping(value = "/", produces = { "application/octet-stream" })
+	public @ResponseBody ResponseEntity<?> buildApp(@ModelAttribute Project project) throws Exception {
+		logger.info("Received request for generating application for project {}", project);
+
+		if (project == null) {
+			logger.error("Project is missing");
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		return buildComponent.buildApp(project, true);
+	}
+
+	@GetMapping("/generatingmodal")
+	public String getGeneratingModal() {
+		return "fragments :: generatingmodal";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String exception(final Exception e, final Model model) {
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		model.addAttribute("stacktrace", errors.toString());
+		String errorMessage = (e != null ? e.getMessage() : "Unknown error");
+		model.addAttribute("errorMessage", errorMessage);
+		return "error";
+	}
 }

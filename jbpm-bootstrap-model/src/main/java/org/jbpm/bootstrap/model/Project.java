@@ -18,27 +18,15 @@ public class Project implements Serializable {
     private String location;
 
     private Map<String, String> mappedVersions = new HashMap<String, String>();
-
+    
     public Project() {
-        this.mappedVersions.put("Enterprise 7.2", "7.14.0.Final-redhat-00002");
-        this.mappedVersions.put("Enterprise 7.2.1", "7.14.0.Final-redhat-00004");
-        this.mappedVersions.put("Enterprise 7.3", "7.18.0.Final-redhat-00002");
-        this.mappedVersions.put("Enterprise 7.3.1", "7.18.0.Final-redhat-00004");
-        this.mappedVersions.put("Enterprise 7.4", "7.23.0.Final-redhat-00002");
-        this.mappedVersions.put("Enterprise 7.4.1", "7.23.0.Final-redhat-00003");
-        this.mappedVersions.put("Enterprise 7.5.0", "7.26.0.Final-redhat-00005");
-        this.mappedVersions.put("Enterprise 7.5.1", "7.26.0.Final-redhat-00006");
-        this.mappedVersions.put("Enterprise 7.6.0", "7.30.0.Final-redhat-00003");
-        this.mappedVersions.put("Enterprise 7.7.0", "7.33.0.Final-redhat-00002");
-        this.mappedVersions.put("Enterprise 7.8.0", "7.39.0.Final-redhat-00005");
-        this.mappedVersions.put("Enterprise 7.8.1", "7.39.0.Final-redhat-00007");
-        this.mappedVersions.put("Enterprise 7.9.0", "7.44.0.Final-redhat-00003");
-        this.mappedVersions.put("Enterprise 7.10.0", "7.48.0.Final-redhat-00004");
-        this.mappedVersions.put("Enterprise 7.10.1", "7.48.0.Final-redhat-00006");
-        this.mappedVersions.put("Enterprise 7.11.0", "7.52.0.Final-redhat-00007");
-        this.mappedVersions.put("Enterprise 7.11.1", "7.52.0.Final-redhat-00008");
+    	
     }
-
+    
+    public Project(Map<String, String> mappedVersions) {
+      	
+      }
+    
     public String getName() {
         return name;
     }

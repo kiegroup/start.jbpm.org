@@ -29,6 +29,11 @@
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.min.js"></script>
+    <script th:inline="javascript">
+
+    var defaultVersion = /*[[${version}]]*/;
+
+	</script>
 </head>
 <body>
 <div id="container">
@@ -155,50 +160,15 @@
                         </div>
                         <div class="form-group">
                             <label class="my-1 mr-2" for="kieVersion"><strong th:text="#{page.configure.appinfo.version}"></strong></label>
-                            <select class="custom-select my-1 mr-sm-2" id="kieVersion" th:field="*{version}">
-                                <option value="" disabled>Enterprise</option>
-				<option value="7.52.0.Final-redhat-00008">Enterprise 7.11.1</option>
-                                <option value="7.52.0.Final-redhat-00007">Enterprise 7.11.0</option>
-                                <option value="7.48.0.Final-redhat-00006">Enterprise 7.10.1</option>
-                                <option value="7.48.0.Final-redhat-00004">Enterprise 7.10.0</option>
-                                <option value="7.44.0.Final-redhat-00003">Enterprise 7.9.0</option>
-                                <option value="7.39.0.Final-redhat-00007">Enterprise 7.8.1</option>
-                                <option value="7.39.0.Final-redhat-00005">Enterprise 7.8.0</option>
-                                <option value="7.33.0.Final-redhat-00002">Enterprise 7.7.0</option>
-                                <option value="7.30.0.Final-redhat-00003">Enterprise 7.6.0</option>
-                                <option value="7.26.0.Final-redhat-00006">Enterprise 7.5.1</option>
-                                <option value="7.26.0.Final-redhat-00005">Enterprise 7.5.0</option>
-                                <option value="7.23.0.Final-redhat-00002">Enterprise 7.4</option>
-                                <option value="7.18.0.Final-redhat-00004">Enterprise 7.3.1</option>
-                                <option value="7.18.0.Final-redhat-00002">Enterprise 7.3</option>
-                                <option value="" disabled>Community</option>
-                                <option value="7.58.0.Final">7.58.0.Final</option>
-                                <option value="7.57.0.Final">7.57.0.Final</option>
-                                <option value="7.56.0.Final">7.56.0.Final</option>
-                                <option value="7.55.0.Final">7.55.0.Final</option>
-                                <option value="7.54.0.Final">7.54.0.Final</option>
-                                <option value="7.53.0.Final">7.53.0.Final</option>
-                                <option value="7.52.0.Final">7.52.0.Final</option>
-                                <option value="7.51.0.Final">7.51.0.Final</option>
-                                <option value="7.50.0.Final">7.50.0.Final</option>
-                                <option value="7.49.0.Final">7.49.0.Final</option>
-                                <option value="7.48.0.Final">7.48.0.Final</option>
-                                <option value="7.47.0.Final">7.47.0.Final</option>
-                                <option value="7.46.0.Final">7.46.0.Final</option>
-                                <option value="7.45.0.Final">7.45.0.Final</option>
-                                <option value="7.44.0.Final">7.44.0.Final</option>
-                                <option value="7.43.0.Final">7.43.0.Final</option>
-                                <option value="7.42.0.Final">7.42.0.Final</option>
-                                <option value="7.41.0.Final">7.41.0.Final</option>
-                                <option value="7.40.0.Final">7.40.0.Final</option>
-                                <option value="7.39.0.Final">7.39.0.Final</option>
-                                <option value="7.38.0.Final">7.38.0.Final</option>
-                                <option value="7.37.0.Final">7.37.0.Final</option>
-                                <option value="7.36.0.Final">7.36.0.Final</option>
-                                <option value="7.35.0.Final">7.35.0.Final</option>
-                                <option value="7.34.0.Final">7.34.0.Final</option>
-                                <option value="7.58.0.Final">7.58.0.Final</option>
-                                <option value="7.59.0.Final">7.59.0.Final</option>
+                       		  <select class="custom-select my-1 mr-sm-2" id="kieVersion" th:field="*{version}">                       		  	   
+                       		  	 <option value="" disabled>Enterprise</option> 
+                       		  	 <option th:each="version : ${enterpriseVersions.entrySet()}" 
+         							th:value="${version.key}" 
+         							th:text="${version.value}"></option>
+         						 <option value="" disabled>Community</option>
+      							 <option th:each="version : ${communityVersions}" 
+      							 	th:value="${version}"         							
+         							th:text="${version}"></option>                       		  	        						                         
                             </select>
                         </div>
                     </div>
@@ -376,12 +346,13 @@
         $('input:checkbox#optionsService').val("service");
         $('input:radio#capabilitiesBusinessAutomation').prop('checked', 'checked');
         $('input:text#appPackage').val('com.company');
-        $('input:text#appName').val('business-application');
-        setDefaultVersion();
-    }
+        $('input:text#appName').val('business-application');       
+        setDefaultVersion(); 
+    }      
 
-    function setDefaultVersion() {
-        $('#kieVersion').val('7.59.0.Final');
+	function setDefaultVersion() {
+	    
+        $('#kieVersion').val(defaultVersion);        
     }
 
     function generateWithDefaultSettings() {

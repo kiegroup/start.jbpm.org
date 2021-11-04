@@ -19,6 +19,7 @@ import org.kie.internal.runtime.error.ExecutionError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -33,9 +34,9 @@ public class BuildComponent {
     private static final String CONTAINER_ID = "jbpm-bootstrap-kjar";
     private static final String PROCESS_ID = "GenerateProject";
 
-    private static final String DEFAULT_VERSION = "7.59.0.Final";
-    private static final String KIE_VERSION = System.getProperty("org.kie.version",
-                                                                 DEFAULT_VERSION);
+    @Value("${kieserver.version}")
+    private String defaultVersion;
+    private String kieVersion = System.getProperty("org.kie.version",defaultVersion);
     private static final String MVN_SETTINGS = System.getProperty("kie.maven.settings.custom");
 
     private static final String DEFAULT_SPRING_BOOT_VERSION = "2.3.4.RELEASE";
@@ -95,7 +96,7 @@ public class BuildComponent {
             params.put("kjarSettings",
                        kjarSettings);
             params.put("kieVersion",
-                       KIE_VERSION);
+            		kieVersion);
             params.put("projectVersion",
                        project.getVersion());
             params.put("projectOptions",
@@ -154,7 +155,7 @@ public class BuildComponent {
     }
 
     public String getDefaultVersion() {
-        return DEFAULT_VERSION;
+        return defaultVersion;
     }
 
     public Project setDefaultsIfNotExist(Project project) {
@@ -177,7 +178,7 @@ public class BuildComponent {
         }
 
         if (project.getVersion() == null || project.getVersion().length() < 1) {
-            project.setVersion(DEFAULT_VERSION);
+            project.setVersion(defaultVersion);
         }
 
         return project;

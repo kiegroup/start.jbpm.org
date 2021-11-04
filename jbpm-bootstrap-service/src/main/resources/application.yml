@@ -1,0 +1,62 @@
+﻿kieserver:
+  version: 7.59.0.Final
+mapping-versions:
+  mappedVersions:
+    Enterprise 7.2: 7.14.0.Final-redhat-00002
+    Enterprise 7.3: 7.18.0.Final-redhat-00002
+    Enterprise 7.3.1: 7.18.0.Final-redhat-00004
+    Enterprise 7.4: 7.23.0.Final-redhat-00002
+    Enterprise 7.4.1: 7.23.0.Final-redhat-00003
+    Enterprise 7.5.0: 7.26.0.Final-redhat-00005
+    Enterprise 7.5.1: 7.26.0.Final-redhat-00006
+    Enterprise 7.6.0: 7.30.0.Final-redhat-00003
+    Enterprise 7.7.0: 7.33.0.Final-redhat-00002
+    Enterprise 7.8.0: 7.39.0.Final-redhat-00005
+    Enterprise 7.8.1: 7.39.0.Final-redhat-00007
+    Enterprise 7.9.0: 7.44.0.Final-redhat-00003
+    Enterprise 7.10.0: 7.48.0.Final-redhat-00004
+    Enterprise 7.10.1: 7.48.0.Final-redhat-00006
+    Enterprise 7.11.0: 7.52.0.Final-redhat-00007
+    Enterprise 7.11.1: 7.52.0.Final-redhat-00008
+  enterpriseVersions:
+    7.52.0.Final-redhat-00008: Enterprise 7.11.1
+    7.52.0.Final-redhat-00007: Enterprise 7.11.0
+    7.48.0.Final-redhat-00006: Enterprise 7.10.1
+    7.48.0.Final-redhat-00004: Enterprise 7.10.0
+    7.44.0.Final-redhat-00003: Enterprise 7.9.0
+    7.39.0.Final-redhat-00007: Enterprise 7.8.1
+    7.39.0.Final-redhat-00005: Enterprise 7.8.0
+    7.33.0.Final-redhat-00002: Enterprise 7.7.0
+    7.30.0.Final-redhat-00003: Enterprise 7.6.0
+    7.26.0.Final-redhat-00006: Enterprise 7.5.1
+    7.26.0.Final-redhat-00005: Enterprise 7.5.0
+    7.23.0.Final-redhat-00002: Enterprise 7.4
+    7.18.0.Final-redhat-00004: Enterprise 7.3.1
+    7.18.0.Final-redhat-00002: Enterprise 7.3      
+  communityVersions:
+    - 7.59.0.Final
+    - 7.58.0.Final
+    - 7.57.0.Final
+    - 7.56.0.Final
+    - 7.55.0.Final
+    - 7.54.0.Final
+    - 7.53.0.Final
+    - 7.52.0.Final
+    - 7.51.0.Final
+    - 7.50.0.Final
+    - 7.49.0.Final
+    - 7.48.0.Final
+    - 7.47.0.Final
+    - 7.46.0.Final
+    - 7.45.0.Final
+    - 7.44.0.Final
+    - 7.43.0.Final
+    - 7.42.0.Final
+    - 7.41.0.Final
+    - 7.40.0.Final
+    - 7.39.0.Final
+    - 7.38.0.Final
+    - 7.37.0.Final
+    - 7.36.0.Final
+    - 7.35.0.Final
+    - 7.34.0.Final
