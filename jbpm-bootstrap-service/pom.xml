@@ -124,7 +124,6 @@
       <properties>
         <jkube.mode>Kubernetes</jkube.mode>
         <local.maven.path>../jbpm-bootstrap-kjar/target/local-repository/maven</local.maven.path>
-        <spring.profiles.active>openshift</spring.profiles.active>
       </properties>
 
       <build>
@@ -172,7 +171,7 @@
                       <user>jboss:jboss:jboss</user>
                     </assembly>
                     <env>
-                      <JAVA_OPTIONS>-Dorg.kie.version=7.RELEASE -Dspring.profiles.active=${spring.profiles.active}</JAVA_OPTIONS>
+                      <JAVA_OPTIONS>-Dorg.kie.version=7.RELEASE</JAVA_OPTIONS>
                     </env>
                   </build>
                 </image>
@@ -202,6 +201,7 @@
       <properties>
         <jkube.mode>Kubernetes</jkube.mode>
         <local.maven.path>../jbpm-bootstrap-kjar/target/local-repository/maven</local.maven.path>
+        <spring.profiles.active>openshift</spring.profiles.active>
       </properties>
 
       <build>
