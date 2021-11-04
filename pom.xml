@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-   <parent>
+  <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.3.4.RELEASE</version>
-    <relativePath /> 
+    <relativePath/>
   </parent>
   <groupId>start.jbpm.org</groupId>
   <artifactId>start.jbpm.org</artifactId>
@@ -13,9 +13,9 @@
   <name>Start :: jbpm :: Org</name>
   <description>Start :: jbpm :: Org :: Rootproject</description>
   <modules>
-  	<module>jbpm-bootstrap-model</module>
-  	<module>jbpm-bootstrap-kjar</module>
-  	<module>jbpm-bootstrap-service</module>
+    <module>jbpm-bootstrap-model</module>
+    <module>jbpm-bootstrap-kjar</module>
+    <module>jbpm-bootstrap-service</module>
   </modules>
-  
+
 </project>

@@ -6,19 +6,19 @@
     <artifactId>start.jbpm.org</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>jbpm-bootstrap-service</artifactId>  
+  <artifactId>jbpm-bootstrap-service</artifactId>
   <packaging>jar</packaging>
 
   <name>jBPM :: Bootstrap :: Service</name>
-  <description>Service to generate business applications :: jBPM</description> 
+  <description>Service to generate business applications :: jBPM</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <narayana.version>5.9.0.Final</narayana.version>
-    
-    <kie.version>7.59.0.Final</kie.version>
+
+    <kie.version>7.60.0.Final</kie.version>
     <org.jbpm.start.model.version>1.0.0</org.jbpm.start.model.version>
     <jkube.version>1.4.0</jkube.version>
   </properties>
@@ -79,8 +79,8 @@
       <artifactId>nekohtml</artifactId>
     </dependency>
   </dependencies>
-  
-  
+
+
   <build>
     <plugins>
       <plugin>
@@ -89,7 +89,7 @@
       </plugin>
     </plugins>
   </build>
-   <repositories>
+  <repositories>
     <repository>
       <id>jboss-public-repository-group</id>
       <name>JBoss Public Maven Repository Group</name>
@@ -155,17 +155,17 @@
                           </file>
                         </files>
                         <fileSets>
-                        <fileSet>
-                          <directory>src/main/docker</directory>
-                          <outputDirectory>home/jboss/.m2</outputDirectory>
-                          <includes>
-                            <include>settings.xml</include>
-                          </includes>
-                        </fileSet>
-                        <fileSet>
-                          <directory>${local.maven.path}</directory>
-                          <outputDirectory>home/jboss/.m2/repository</outputDirectory>
-                        </fileSet>
+                          <fileSet>
+                            <directory>src/main/docker</directory>
+                            <outputDirectory>home/jboss/.m2</outputDirectory>
+                            <includes>
+                              <include>settings.xml</include>
+                            </includes>
+                          </fileSet>
+                          <fileSet>
+                            <directory>${local.maven.path}</directory>
+                            <outputDirectory>home/jboss/.m2/repository</outputDirectory>
+                          </fileSet>
                         </fileSets>
                       </inline>
                       <user>jboss:jboss:jboss</user>
@@ -189,7 +189,7 @@
           </plugin>
         </plugins>
       </build>
-    </profile> 
+    </profile>
     <profile>
       <id>openshift</id>
       <activation>
@@ -233,17 +233,17 @@
                           </file>
                         </files>
                         <fileSets>
-                        <fileSet>
-                          <directory>src/main/docker</directory>
-                          <outputDirectory>home/jboss/.m2</outputDirectory>
-                          <includes>
-                            <include>settings.xml</include>
-                          </includes>
-                        </fileSet>
-                        <fileSet>
-                          <directory>${local.maven.path}</directory>
-                          <outputDirectory>home/jboss/.m2/repository</outputDirectory>
-                        </fileSet>
+                          <fileSet>
+                            <directory>src/main/docker</directory>
+                            <outputDirectory>home/jboss/.m2</outputDirectory>
+                            <includes>
+                              <include>settings.xml</include>
+                            </includes>
+                          </fileSet>
+                          <fileSet>
+                            <directory>${local.maven.path}</directory>
+                            <outputDirectory>home/jboss/.m2/repository</outputDirectory>
+                          </fileSet>
                         </fileSets>
                       </inline>
                       <user>jboss:jboss:jboss</user>
@@ -267,8 +267,8 @@
           </plugin>
         </plugins>
       </build>
-    </profile> 
+    </profile>
   </profiles>
-  
+
 
 </project>

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <groupId>start.jbpm.org</groupId>
   <artifactId>jbpm-bootstrap-kjar</artifactId>
   <version>0.0.1-SNAPSHOT</version>
@@ -10,40 +10,40 @@
   <description>Processes responsible for generating business applications</description>
 
   <properties>
-    <kie.version>7.59.0.Final</kie.version>
+    <kie.version>7.60.0.Final</kie.version>
     <version.maven.clean.plugin>2.5</version.maven.clean.plugin>
-	<version.maven.install.plugin>2.4</version.maven.install.plugin>
-	<version.maven.deploy.plugin>2.7</version.maven.deploy.plugin>
-	<version.maven.site.plugin>3.3</version.maven.site.plugin>
-	<version.maven.antrun.plugin>1.3</version.maven.antrun.plugin>
-	<version.maven.assembly.plugin>2.2-beta-5</version.maven.assembly.plugin>
-	<version.maven.dependency.plugin>2.8</version.maven.dependency.plugin>
-	<version.maven.release.plugin>2.3.2</version.maven.release.plugin>
-	<version.maven.archetype.plugin>3.0.1</version.maven.archetype.plugin>
-	<version.plexus.component>1.6</version.plexus.component>
-	<version.xml.apis>1.0.b2</version.xml.apis>
-	<version.maven.artifact>3.0</version.maven.artifact>
-	<version.commons.io>2.2</version.commons.io>
-	<version.commons.lang>2.4</version.commons.lang>
-	<version.velocity>1.7</version.velocity>
-	<version.asm>3.2</version.asm>
-	<version.wagon.provider.api>2.8</version.wagon.provider.api>
-	<version.plexus.utils>3.0.21</version.plexus.utils>
-	<version.maven.plugin.api>3.0</version.maven.plugin.api>
-	<version.maven.repository.metadata>3.0</version.maven.repository.metadata>
-	<version.plexus.interpolation>1.14</version.plexus.interpolation>
-	<version.maven.model>3.0</version.maven.model>
-	<version.maven.invoker>2.2</version.maven.invoker>
-	<version.maven.artifact.filters>3.0.0</version.maven.artifact.filters>
-	<version.maven.resources.plugin>3.1.0</version.maven.resources.plugin>
-	<version.ant>1.8.1</version.ant>
+    <version.maven.install.plugin>2.4</version.maven.install.plugin>
+    <version.maven.deploy.plugin>2.7</version.maven.deploy.plugin>
+    <version.maven.site.plugin>3.3</version.maven.site.plugin>
+    <version.maven.antrun.plugin>1.3</version.maven.antrun.plugin>
+    <version.maven.assembly.plugin>2.2-beta-5</version.maven.assembly.plugin>
+    <version.maven.dependency.plugin>2.8</version.maven.dependency.plugin>
+    <version.maven.release.plugin>2.3.2</version.maven.release.plugin>
+    <version.maven.archetype.plugin>3.0.1</version.maven.archetype.plugin>
+    <version.plexus.component>1.6</version.plexus.component>
+    <version.xml.apis>1.0.b2</version.xml.apis>
+    <version.maven.artifact>3.0</version.maven.artifact>
+    <version.commons.io>2.2</version.commons.io>
+    <version.commons.lang>2.4</version.commons.lang>
+    <version.velocity>1.7</version.velocity>
+    <version.asm>3.2</version.asm>
+    <version.wagon.provider.api>2.8</version.wagon.provider.api>
+    <version.plexus.utils>3.0.21</version.plexus.utils>
+    <version.maven.plugin.api>3.0</version.maven.plugin.api>
+    <version.maven.repository.metadata>3.0</version.maven.repository.metadata>
+    <version.plexus.interpolation>1.14</version.plexus.interpolation>
+    <version.maven.model>3.0</version.maven.model>
+    <version.maven.invoker>2.2</version.maven.invoker>
+    <version.maven.artifact.filters>3.0.0</version.maven.artifact.filters>
+    <version.maven.resources.plugin>3.1.0</version.maven.resources.plugin>
+    <version.ant>1.8.1</version.ant>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>start.jbpm.org</groupId>
       <artifactId>jbpm-bootstrap-model</artifactId>
-      <version>1.0.0</version>      
+      <version>1.0.0</version>
     </dependency>
   </dependencies>
 
@@ -351,7 +351,7 @@
         </dependency>
 
 
-         <dependency>
+        <dependency>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
           <version>${version.maven.clean.plugin}</version>
@@ -479,7 +479,7 @@
           <version>${version.ant}</version>
         </dependency>
       </dependencies>
-      
+
       <build>
         <plugins>
           <plugin>
