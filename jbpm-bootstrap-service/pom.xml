@@ -248,6 +248,17 @@
                       </inline>
                       <user>jboss:jboss:jboss</user>
                     </assembly>
+                    <runCmds>
+                      <!-- Narayana needs to write to the /deployments directory.
+                            OpenShift won't allow the container to run with root, thus not creating the dir.
+                           In this case we change the permissions of our directory to anyone in root group to write to it
+                        -->
+                      <run>
+                        chgrp -R 0 /deployments &amp;&amp; \
+                        chmod -R g=u /deployments
+                      </run>
+                    </runCmds>
+                    <user>jboss</user>
                     <env>
                       <JAVA_OPTIONS>-Dorg.kie.version=7.RELEASE -Dspring.profiles.active=${spring.profiles.active}</JAVA_OPTIONS>
                     </env>
