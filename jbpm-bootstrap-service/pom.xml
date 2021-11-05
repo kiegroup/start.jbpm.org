@@ -6,19 +6,19 @@
     <artifactId>start.jbpm.org</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>jbpm-bootstrap-service</artifactId>  
+  <artifactId>jbpm-bootstrap-service</artifactId>
   <packaging>jar</packaging>
 
   <name>jBPM :: Bootstrap :: Service</name>
-  <description>Service to generate business applications :: jBPM</description> 
+  <description>Service to generate business applications :: jBPM</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <narayana.version>5.9.0.Final</narayana.version>
-    
-    <kie.version>7.59.0.Final</kie.version>
+
+    <kie.version>7.60.0.Final</kie.version>
     <org.jbpm.start.model.version>1.0.0</org.jbpm.start.model.version>
     <jkube.version>1.4.0</jkube.version>
   </properties>
@@ -79,8 +79,8 @@
       <artifactId>nekohtml</artifactId>
     </dependency>
   </dependencies>
-  
-  
+
+
   <build>
     <plugins>
       <plugin>
@@ -89,7 +89,7 @@
       </plugin>
     </plugins>
   </build>
-   <repositories>
+  <repositories>
     <repository>
       <id>jboss-public-repository-group</id>
       <name>JBoss Public Maven Repository Group</name>
@@ -118,6 +118,83 @@
       <activation>
         <property>
           <name>docker</name>
+        </property>
+      </activation>
+
+      <properties>
+        <jkube.mode>Kubernetes</jkube.mode>
+        <local.maven.path>../jbpm-bootstrap-kjar/target/local-repository/maven</local.maven.path>
+      </properties>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.jkube</groupId>
+            <artifactId>kubernetes-maven-plugin</artifactId>
+            <version>${jkube.version}</version>
+            <configuration>
+              <verbose>false</verbose>
+              <images>
+                <image>
+                  <name>jbpm/${project.artifactId}:latest</name>
+                  <build>
+                    <from>registry.access.redhat.com/ubi8/openjdk-8:latest</from>
+                    <assembly>
+                      <targetDir>/</targetDir>
+                      <inline>
+                        <files>
+                          <file>
+                            <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+                            <outputDirectory>deployments</outputDirectory>
+                            <destName>${project.build.finalName}.${project.packaging}</destName>
+                          </file>
+                          <file>
+                            <source>bootstrap-jbpm.xml</source>
+                            <outputDirectory>deployments</outputDirectory>
+                            <destName>bootstrap-jbpm.xml</destName>
+                          </file>
+                        </files>
+                        <fileSets>
+                          <fileSet>
+                            <directory>src/main/docker</directory>
+                            <outputDirectory>home/jboss/.m2</outputDirectory>
+                            <includes>
+                              <include>settings.xml</include>
+                            </includes>
+                          </fileSet>
+                          <fileSet>
+                            <directory>${local.maven.path}</directory>
+                            <outputDirectory>home/jboss/.m2/repository</outputDirectory>
+                          </fileSet>
+                        </fileSets>
+                      </inline>
+                      <user>jboss:jboss:jboss</user>
+                    </assembly>
+                    <env>
+                      <JAVA_OPTIONS>-Dorg.kie.version=7.RELEASE</JAVA_OPTIONS>
+                    </env>
+                  </build>
+                </image>
+              </images>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>install</phase>
+                <goals>
+                  <goal>resource</goal>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>openshift</id>
+      <activation>
+        <property>
+          <name>openshift</name>
         </property>
       </activation>
 
@@ -156,21 +233,32 @@
                           </file>
                         </files>
                         <fileSets>
-                        <fileSet>
-                          <directory>src/main/docker</directory>
-                          <outputDirectory>home/jboss/.m2</outputDirectory>
-                          <includes>
-                            <include>settings.xml</include>
-                          </includes>
-                        </fileSet>
-                        <fileSet>
-                          <directory>${local.maven.path}</directory>
-                          <outputDirectory>home/jboss/.m2/repository</outputDirectory>
-                        </fileSet>
+                          <fileSet>
+                            <directory>src/main/docker</directory>
+                            <outputDirectory>home/jboss/.m2</outputDirectory>
+                            <includes>
+                              <include>settings.xml</include>
+                            </includes>
+                          </fileSet>
+                          <fileSet>
+                            <directory>${local.maven.path}</directory>
+                            <outputDirectory>home/jboss/.m2/repository</outputDirectory>
+                          </fileSet>
                         </fileSets>
                       </inline>
                       <user>jboss:jboss:jboss</user>
                     </assembly>
+                    <runCmds>
+                      <!-- Narayana needs to write to the /deployments directory.
+                            OpenShift won't allow the container to run with root, thus not creating the dir.
+                           In this case we change the permissions of our directory to anyone in root group to write to it
+                        -->
+                      <run>
+                        chgrp -R 0 /deployments &amp;&amp; \
+                        chmod -R g=u /deployments
+                      </run>
+                    </runCmds>
+                    <user>jboss</user>
                     <env>
                       <JAVA_OPTIONS>-Dorg.kie.version=7.RELEASE -Dspring.profiles.active=${spring.profiles.active}</JAVA_OPTIONS>
                     </env>
@@ -190,85 +278,8 @@
           </plugin>
         </plugins>
       </build>
-    </profile> 
-    <profile>
-      <id>openshift</id>
-      <activation>
-        <property>
-          <name>openshift</name>
-        </property>
-      </activation>
-
-      <properties>
-        <jkube.mode>Kubernetes</jkube.mode>
-        <local.maven.path>../jbpm-bootstrap-kjar/target/local-repository/maven</local.maven.path>
-      </properties>
-
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.eclipse.jkube</groupId>
-            <artifactId>kubernetes-maven-plugin</artifactId>
-            <version>${jkube.version}</version>
-            <configuration>
-              <verbose>false</verbose>
-              <images>
-                <image>
-                  <name>jbpm/${project.artifactId}:latest</name>
-                  <build>
-                    <from>registry.access.redhat.com/ubi8/openjdk-8:latest</from>
-                    <assembly>
-                      <targetDir>/</targetDir>
-                      <inline>
-                        <files>
-                          <file>
-                            <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
-                            <outputDirectory>deployments</outputDirectory>
-                            <destName>${project.build.finalName}.${project.packaging}</destName>
-                          </file>
-                          <file>
-                            <source>bootstrap-jbpm.xml</source>
-                            <outputDirectory>deployments</outputDirectory>
-                            <destName>bootstrap-jbpm.xml</destName>
-                          </file>
-                        </files>
-                        <fileSets>
-                        <fileSet>
-                          <directory>src/main/docker</directory>
-                          <outputDirectory>home/jboss/.m2</outputDirectory>
-                          <includes>
-                            <include>settings.xml</include>
-                          </includes>
-                        </fileSet>
-                        <fileSet>
-                          <directory>${local.maven.path}</directory>
-                          <outputDirectory>home/jboss/.m2/repository</outputDirectory>
-                        </fileSet>
-                        </fileSets>
-                      </inline>
-                      <user>jboss:jboss:jboss</user>
-                    </assembly>
-                    <env>
-                      <JAVA_OPTIONS>-Dorg.kie.version=7.RELEASE -Dspring.profiles.active=${spring.profiles.active}</JAVA_OPTIONS>
-                    </env>
-                  </build>
-                </image>
-              </images>
-            </configuration>
-            <executions>
-              <execution>
-                <phase>install</phase>
-                <goals>
-                  <goal>resource</goal>
-                  <goal>build</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile> 
+    </profile>
   </profiles>
-  
+
 
 </project>
