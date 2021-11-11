@@ -23,8 +23,8 @@ public class Project implements Serializable {
     	
     }
     
-    public Project(Map<String, String> mappedVersions) {
-      	
+    public Project(Map<String, String> mappedVersions) {   	 
+    	this.mappedVersions = mappedVersions;
       }
     
     public String getName() {
