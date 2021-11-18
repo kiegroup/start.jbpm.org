@@ -1,0 +1,46 @@
+metadata:
+  annotations:
+    configmap.jkube.io/update-on-change: ${project.artifactId}
+spec:
+  replicas: 1
+  strategy:
+    activeDeadlineSeconds: 21600
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    type: Recreate
+  template:
+    spec:
+      containers:
+      - name: jbpm-bootstrap-service
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8090
+            protocol: TCP
+          - containerPort: 8778
+            protocol: TCP
+          - containerPort: 9779
+            protocol: TCP
+        resources:
+          limits:
+            memory: 2Gi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+          - mountPath: /deployments/data
+            name: data-volume
+          - mountPath: /deployments/config
+            name: config
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: start-jbpm-storage
+        - name: config
+          configMap:
+            name: ${project.artifactId}
+            items:
+            - key: application.yml
+              path: application.yml
