@@ -14,12 +14,18 @@ After some time, access the application via [http://localhost:8090/](http://loca
 
 ## Building the Website
 
+**IMPORTANT!** First thing you need to do is run a complete `mvn clean install` from the main 
+module (this project's root) to create the local maven repository.
+
+All the commands below must be run inside the module [`jbpm-bootstrap-service`](jbpm-bootstrap-service).
+
 ### Docker profile
 
 In this profile, just a regular docker image is built with the website in order to try it locally.
-To build using this profile, run the following command from this project's root:
+To build using this profile, run the following command:
 
 ````shell
+## remember to run inside jbpm-bootstrap-service
 $ mvn clean install -Pdocker
 ````
 
@@ -36,6 +42,7 @@ $ docker run --rm -it -p 8090:8090 jbpm/jbpm-bootstrap-service:latest
 This profile builds an image that exposes the secure `8443` port to be deployed on OpenShift online:
 
 ```
+## remember to run inside jbpm-bootstrap-service
 $ mvn clean install -Popenshift
 ```
 
@@ -59,6 +66,7 @@ The service can be exposed via an OpenShift Route or a Kubernetes Ingress by the
 To build it, run the following command:
 
 ```shell
+## remember to run inside jbpm-bootstrap-service
 $ mvn clean install -Popenshift_internal
 ```
 
