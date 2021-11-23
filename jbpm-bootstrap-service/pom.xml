@@ -127,6 +127,14 @@
       </properties>
 
       <build>
+        <resources>
+          <resource>
+            <directory>src/main/jkube</directory>
+            <excludes>
+              <exclude>**/*.yaml</exclude>
+            </excludes>
+          </resource>
+        </resources>
         <plugins>
           <plugin>
             <groupId>org.eclipse.jkube</groupId>
@@ -191,6 +199,7 @@
       </build>
     </profile>
     <profile>
+      <!-- Profile dedicated to publish on OpenShift Online with owned certificates -->
       <id>openshift</id>
       <activation>
         <property>
@@ -205,12 +214,174 @@
       </properties>
 
       <build>
+        <resources>
+          <resource>
+            <directory>src/main/jkube</directory>
+            <excludes>
+              <exclude>**/*.yaml</exclude>
+            </excludes>
+          </resource>
+        </resources>
         <plugins>
           <plugin>
             <groupId>org.eclipse.jkube</groupId>
             <artifactId>kubernetes-maven-plugin</artifactId>
             <version>${jkube.version}</version>
             <configuration>
+              <verbose>false</verbose>
+              <images>
+                <image>
+                  <name>jbpm/${project.artifactId}:latest</name>
+                  <build>
+                    <from>registry.access.redhat.com/ubi8/openjdk-8:latest</from>
+                    <assembly>
+                      <targetDir>/</targetDir>
+                      <inline>
+                        <files>
+                          <file>
+                            <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+                            <outputDirectory>deployments</outputDirectory>
+                            <destName>${project.build.finalName}.${project.packaging}</destName>
+                          </file>
+                          <file>
+                            <source>bootstrap-jbpm.xml</source>
+                            <outputDirectory>deployments</outputDirectory>
+                            <destName>bootstrap-jbpm.xml</destName>
+                          </file>
+                        </files>
+                        <fileSets>
+                          <fileSet>
+                            <directory>src/main/docker</directory>
+                            <outputDirectory>home/jboss/.m2</outputDirectory>
+                            <includes>
+                              <include>settings.xml</include>
+                            </includes>
+                          </fileSet>
+                          <fileSet>
+                            <directory>${local.maven.path}</directory>
+                            <outputDirectory>home/jboss/.m2/repository</outputDirectory>
+                          </fileSet>
+                        </fileSets>
+                      </inline>
+                      <user>jboss:jboss:jboss</user>
+                    </assembly>
+                    <runCmds>
+                      <!-- Narayana needs to write to the /deployments directory.
+                            OpenShift won't allow the container to run with root, thus not creating the dir.
+                           In this case we change the permissions of our directory to anyone in root group to write to it
+                        -->
+                      <run>
+                        chgrp -R 0 /deployments &amp;&amp; \
+                        chmod -R g=u /deployments
+                      </run>
+                    </runCmds>
+                    <user>jboss</user>
+                    <env>
+                      <JAVA_OPTIONS>-Dorg.kie.version=7.RELEASE -Dspring.profiles.active=${spring.profiles.active}</JAVA_OPTIONS>
+                    </env>
+                  </build>
+                </image>
+              </images>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>install</phase>
+                <goals>
+                  <goal>resource</goal>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!-- Profile to deploy the application on a dedicated OpenShift, with Routes to manage the TLS communication -->
+      <id>openshift_internal</id>
+      <activation>
+        <property>
+          <name>openshift_internal</name>
+        </property>
+      </activation>
+
+      <properties>
+        <jkube.mode>Kubernetes</jkube.mode>
+        <local.maven.path>../jbpm-bootstrap-kjar/target/local-repository/maven</local.maven.path>
+        <spring.profiles.active>openshift_internal</spring.profiles.active>
+        <webPort>8090</webPort>
+        <jkube.generator.java-exec.webPort>${webPort}</jkube.generator.java-exec.webPort>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+      </dependencies>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <excludes>
+              <!-- this file should be served by the CM, we remove it here to avoid configuration mismatch -->
+              <exclude>**/application.yml</exclude>
+              <!-- removes unused properties to not clash with our own properties -->
+              <exclude>**/*-dev.properties</exclude>
+              <exclude>**/*-docker.properties</exclude>
+              <exclude>**/*-openshift.properties</exclude>
+            </excludes>
+          </resource>
+        </resources>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.jkube</groupId>
+            <artifactId>kubernetes-maven-plugin</artifactId>
+            <version>${jkube.version}</version>
+            <configuration>
+              <enricher>
+                <config>
+                  <jkube-service>
+                    <name>${project.artifactId}</name>
+                    <type>ClusterIP</type>
+                    <multiPort>true</multiPort>
+                  </jkube-service>
+                </config>
+              </enricher>
+              <resources>
+                <services>
+                  <service>
+                    <name>${project.artifactId}</name>
+                    <ports>
+                      <port>
+                        <name>web</name>
+                        <port>${webPort}</port>
+                        <protocol>tcp</protocol>
+                        <targetPort>${webPort}</targetPort>
+                      </port>
+                      <port>
+                        <name>jolokia</name>
+                        <port>8778</port>
+                        <protocol>tcp</protocol>
+                        <targetPort>8778</targetPort>
+                      </port>
+                      <port>
+                        <name>prometheus</name>
+                        <port>9779</port>
+                        <protocol>tcp</protocol>
+                        <targetPort>9779</targetPort>
+                      </port>
+                    </ports>
+                  </service>
+                </services>
+                <configMap>
+                  <name>${project.artifactId}</name>
+                  <entries>
+                    <entry>
+                      <file>src/main/resources/application.yml</file>
+                    </entry>
+                  </entries>
+                </configMap>
+              </resources>
               <verbose>false</verbose>
               <images>
                 <image>
