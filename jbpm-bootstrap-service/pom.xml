@@ -377,7 +377,7 @@
                   <name>${project.artifactId}</name>
                   <entries>
                     <entry>
-                      <file>src/main/resources/application.yml</file>
+                      <file>jbpm-bootstrap-service/src/main/resources/application.yml</file>
                     </entry>
                   </entries>
                 </configMap>
