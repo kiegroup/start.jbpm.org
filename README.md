@@ -66,7 +66,7 @@ The service can be exposed via an OpenShift Route or a Kubernetes Ingress by the
 To build it, run the following command:
 
 ```shell
-## remember to run inside jbpm-bootstrap-service
+## Remember to run from project root. This will ensure to install all the required mvn-acrhetypes to start the application and generate projects.
 $ mvn clean install -Popenshift_internal
 ```
 
