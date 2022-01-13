@@ -1,0 +1,98 @@
+@Library('jenkins-pipeline-shared-libraries')_
+import org.jenkinsci.plugins.workflow.libs.Library
+import org.kie.jenkins.MavenCommand
+import org.kie.jenkins.MavenStagingHelper
+
+AGENT_LABEL="kie-rhel7"
+MVN_TOOL="kie-maven-3.8.1"
+JDK_TOOL="kie-jdk11"
+startJbpmOrgRepo="start.jbpm.org"
+GIT_AUTHOR="kiegroup"
+TARGET_BRANCH="main"
+COMMIT_MSG="bumped up and added kie-version"
+PR_BRANCH="bump_up_version_to_${NEW_KIE_VERSION}"
+PR_BODY="Please review and merge"
+
+pipeline {
+    agent {
+        label "$AGENT_LABEL"
+    }
+    options{
+        timestamps()
+    }
+    tools {
+        maven "$MVN_TOOL"
+        jdk "$JDK_TOOL"
+    }
+    stages {
+        stage('CleanWorkspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        stage('clone start.jbpm.org') {
+            steps {
+                script {
+                    checkoutStartJbpmRepo()
+                }
+            }
+        }
+        stage('create branch for PR'){
+            steps{
+                dir("${WORKSPACE}/${startJbpmOrgRepo}"){
+                    script{
+                        githubscm.createBranch(PR_BRANCH)
+                    }
+                }
+            }
+        }
+        stage('change and add versions') {
+            steps {
+                // change and add version in application.yml
+                sh 'sed -i "0,/${CURRENT_KIE_VERSION}/{s/${CURRENT_KIE_VERSION}/${NEW_KIE_VERSION}/}" start.jbpm.org/jbpm-bootstrap-service/src/main/resources/application.yml'
+                sh 'sed -i "/communityVersions:.*/a\\ \\ \\ \\ \\- ${NEW_KIE_VERSION}" start.jbpm.org/jbpm-bootstrap-service/src/main/resources/application.yml'
+                // change version in poms
+                sh 'sed -i "0,/<kie.version>${CURRENT_KIE_VERSION}/{s/${CURRENT_KIE_VERSION}/${NEW_KIE_VERSION}/}" start.jbpm.org/jbpm-bootstrap-kjar/pom.xml'
+                sh 'sed -i "0,/<kie.version>${CURRENT_KIE_VERSION}/{s/${CURRENT_KIE_VERSION}/${NEW_KIE_VERSION}/}" start.jbpm.org/jbpm-bootstrap-service/pom.xml'
+            }
+        }
+        stage('add and commit changes'){
+            steps{
+                dir("${WORKSPACE}/${startJbpmOrgRepo}"){
+                    script{
+                        githubscm.commitChanges(COMMIT_MSG)
+                    }
+                }
+            }
+        }
+        stage('push pullrequest branch'){
+            steps{
+                 dir("${WORKSPACE}/${startJbpmOrgRepo}"){
+                     script {
+                        githubscm.pushObject('origin', PR_BRANCH)
+                     }
+                 }
+            }
+        }
+        stage('create pullrequest'){
+            steps{
+                dir("${WORKSPACE}/${startJbpmOrgRepo}"){
+                    script {
+                        githubscm.createPR(COMMIT_MSG,PR_BODY,TARGET_BRANCH)
+                   }
+                }
+            }
+        }
+    }
+    post{
+        always{
+            cleanWs()
+        }
+    }
+}
+
+void checkoutStartJbpmRepo() {
+    dir(startJbpmOrgRepo) {
+        checkout(githubscm.resolveRepository(startJbpmOrgRepo, GIT_AUTHOR, TARGET_BRANCH, false))
+    }
+}
