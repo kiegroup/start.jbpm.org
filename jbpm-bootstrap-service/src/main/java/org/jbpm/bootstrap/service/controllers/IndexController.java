@@ -72,7 +72,7 @@ public class IndexController {
 
 	@ModelAttribute("project")
 	public Project getProject() {
-		return new Project(versionMap.getMappedVersions());
+		return new Project(versionMap.getEnterpriseVersions());
 
 	}
 
