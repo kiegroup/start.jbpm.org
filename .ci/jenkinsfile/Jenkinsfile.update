@@ -46,7 +46,10 @@ pipeline {
                 }
             }
         }
-        stage('change and add versions') {
+        stage('change and add community versions') {
+            when {
+                expression { IS_PROD == 'NO' }
+            }
             steps {
                 // change and add version in application.yml
                 sh 'sed -i "0,/${CURRENT_KIE_VERSION}/{s/${CURRENT_KIE_VERSION}/${NEW_KIE_VERSION}/}" start.jbpm.org/jbpm-bootstrap-service/src/main/resources/application.yml'
@@ -56,6 +59,15 @@ pipeline {
                 sh 'sed -i "0,/<kie.version>${CURRENT_KIE_VERSION}/{s/${CURRENT_KIE_VERSION}/${NEW_KIE_VERSION}/}" start.jbpm.org/jbpm-bootstrap-service/pom.xml'
             }
         }
+         stage('add product versions') {
+             when {
+                 expression { IS_PROD == 'YES' }
+             }
+             steps {
+                 // change and add version in application.yml
+                 sh 'sed -i "/enterpriseVersions:.*/a\\ \\ \\ \\ \\- ${PROD_VERSION}" start.jbpm.org/jbpm-bootstrap-service/src/main/resources/application.yml'
+             }
+         }
         stage('add and commit changes'){
             steps{
                 dir("${WORKSPACE}/${startJbpmOrgRepo}"){
