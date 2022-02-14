@@ -1,5 +1,5 @@
 ﻿kieserver:
-  version: 7.64.0.Final
+  version: 7.65.0.Final
 mapping-versions:
   enterpriseVersions:
     Enterprise 7.11.1: 7.52.0.Final-redhat-00008
@@ -19,6 +19,7 @@ mapping-versions:
     Enterprise 7.3: 7.18.0.Final-redhat-00002 
     Enterprise 7.2: 7.14.0.Final-redhat-00002   
   communityVersions:
+    - 7.65.0.Final
     - 7.64.0.Final
     - 7.63.0.Final
     - 7.62.0.Final
