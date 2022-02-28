@@ -13,6 +13,7 @@ COMMIT_MSG="bumped up and added kie-version"
 PR_BRANCH="bump_up_version_to_${NEW_KIE_VERSION}"
 PR_BODY="Please review and merge"
 
+
 pipeline {
     agent {
         label "$AGENT_LABEL"
@@ -37,7 +38,23 @@ pipeline {
                 }
             }
         }
+        stage('if product version'){
+            when {
+                expression { IS_PROD == 'YES' }
+            }
+            steps{
+                dir("${WORKSPACE}/${startJbpmOrgRepo}"){
+                    script{
+                        PR_BRANCH='new_product_version'
+                        githubscm.createBranch("${PR_BRANCH}")
+                    }
+                }
+            }
+        }
         stage('create branch for PR'){
+            when {
+                expression { IS_PROD == 'NO' }
+            }
             steps{
                 dir("${WORKSPACE}/${startJbpmOrgRepo}"){
                     script{
@@ -65,10 +82,26 @@ pipeline {
              }
              steps {
                  // change and add version in application.yml
-                 sh 'sed -i "/enterpriseVersions:.*/a\\ \\ \\ \\ \\- ${PROD_VERSION}" start.jbpm.org/jbpm-bootstrap-service/src/main/resources/application.yml'
+                 sh 'sed -i "/enterpriseVersions:.*/a\\ \\ \\ \\\\ ${PROD_VERSION}" start.jbpm.org/jbpm-bootstrap-service/src/main/resources/application.yml'
              }
          }
-        stage('add and commit changes'){
+        stage('add and commit prod-version'){
+            when {
+                expression{ IS_PROD == 'YES' }
+            }
+            steps{
+                dir("${WORKSPACE}/${startJbpmOrgRepo}"){
+                    script{
+                        COMMIT_MSG="added new product version"
+                        githubscm.commitChanges("${COMMIT_MSG}")
+                    }
+                }
+            }
+        }
+        stage('add and commit kie-version'){
+            when {
+                expression{ IS_PROD == 'NO' }
+            }
             steps{
                 dir("${WORKSPACE}/${startJbpmOrgRepo}"){
                     script{
