@@ -2,6 +2,7 @@
   version: 7.68.0.Final
 mapping-versions:
   enterpriseVersions:
+    7.12.1: 7.59.0.Final-redhat-00010
     Enterprise 7.12.0: 7.59.0.Final-redhat-00006
     Enterprise 7.11.1: 7.52.0.Final-redhat-00008
     Enterprise 7.11.0: 7.52.0.Final-redhat-00007
